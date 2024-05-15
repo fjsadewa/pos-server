@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>POS INDONESIA | Sistem Antrian</title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="lte/plugins/fontawesome-free/css/all.min.css" />
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="lte/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="lte/dist/css/adminlte.min.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper hw-100">
+      <!-- Navbar -->
+      <div class="row m-3s">
+        <div class="col-lg-12">
+          <nav class="navbar navbar-expand navbar-primary align-items-center" style="background-color: #1b2c5a !important; color: #fff !important">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+              <li class="nav-item d-none d-sm-inline-block">
+                <div class="flex-container">
+                  <img src="gambar/Pos-Ind-putih.png" alt="Logo" height="120" width="150" class="p-2" />
+                </div>
+              </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item d-none d-sm-inline-block">
+                <div class="nav-link">
+                  <h1 style="font-size: 52px; font-weight: bold">KANTOR KCU MALANG</h1>
+                </div>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="content p-2" style="background-color: #1b2c5a">
+        <div class="container-fluid">
+          <div class="row" style="justify-content: center">
+            <!-- /.Carousel-->
+            <div class="col-md-5 d-flex justify-content-center align-items-center">
+              <div class="card p-1" style="height: 550px; width: 550px">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" ">
+                <ol class="carousel-indicators">
+                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="First slide" />
+                  </div>
+                  <div class="carousel-item">
+                    <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="Second slide" />
+                  </div>
+                  <div class="carousel-item">
+                    <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="Third slide" />
+                  </div>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+
+          <div class="col-md-5" style="justify-content: center">
+            <div class="row">
+              <div class="info-box" style="background-color: #ee3f22">
+                <div class="info-box-content">
+                  <h2 class="info-box-text text-center" style="font-weight: bold; color: #fff !important">PILIH ANTRIAN LOKET</h2>
+                </div>
+              </div>
+            </div>
+
+            <div class="row d-flex justify-content-center">
+              <!-- Card -->
+              <div id="category-container"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.content -->
+
+    <!-- Footer -->
+    <div class="footer" style="background-color: #ee3f22 !important; color: #fff !important">
+      <div class="container-fluid">
+        <div class="row align-items-center">
+          <div class="col-md-2 pl-0 pr-1 datetime-content-footer text-center">
+            <div
+              id="datetime"
+              style="font: bold; font-size: 20px; padding: 3px; color: #000;
+                                    background: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.50);
+                                    border radius: 4px; border-right: 2px #1B2C5A solid"
+            ></div>
+          </div>
+          <div class="col-md-10 marquee-content-footer">
+            <marquee scrollamount="10" style="white-space: nowrap; overflow: hidden">
+              <h4 class="font-weight-bold">
+                Kantor POS Indonesia Cabang Utama Malang | Cargo & Freight Company | 🕗 24 Jam | Customer Service (WA Only) 0856 4801 8702 & 085791673245 | Gratis Pick Up/Jemput Paket Hub.
+                081133365100 | FB: posindonesiamalang | Instagram: posaja_malang | Copyright © 2024 POS INDONESIA. All rights reserved.
+              </h4>
+            </marquee>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ./wrapper -->
+    <audio id="player" style="display: none">
+      <source id="mp3_src" src="" type="audio/wav" />
+      Your browser does not support the audio element.
+    </audio>
+    <script src="lte/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- overlayScrollbars -->
+    <script src="lte/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="lte/dist/js/adminlte.js"></script>
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Showtime -->
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <!-- Play Audio -->
+    <script>
+      const socket = io();
+      var sequence = [];
+      var pointer = 0;
+      socket.on("call", (msg) => {
+        console.log(msg);
+        sequence = msg;
+        changeAudio(0);
+      });
+
+      function changeAudio(seqIndex) {
+        var audio = $("#player");
+        var audioFile = sequence[seqIndex];
+        var audioPath = "audio/";
+
+        $("#mp3_src").attr("src", audioPath + audioFile);
+
+        audio[0].pause();
+        audio[0].load();
+        audio[0].oncanplaythrough = audio[0].play();
+      }
+
+      $("#player").on("ended", function () {
+        console.log("ended");
+        // enable button/link
+        if (pointer == sequence.length - 1) {
+          pointer = 0;
+        } else {
+          pointer++;
+          changeAudio(pointer);
+        }
+      });
+    </script>
+    <!-- Create Antrian -->
+    <script type="application/javascript">
+      var toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      // Create Option
+      (async () => {
+        const categories = await fetch("http://localhost/laravel-10/antrianpos-app/public/form"); // Replace with your API endpoint URL if applicable
+        const categoryData = await categories.json();
+        const categoryContainer = document.getElementById("category-container");
+        categoryData.forEach((category) => {
+          const card = document.createElement("div");
+          card.classList.add("col", "card", "p-3");
+          card.dataset.categoryId = category.id;
+
+          const row = document.createElement("div");
+          row.classList.add("row");
+          const nameCol = document.createElement("div");
+          nameCol.classList.add("col-9", "d-flex", "flex-column", "align-items-center", "justify-content-center");
+          const categoryName = document.createElement("h3");
+          categoryName.classList.add("card-text", "font-weight-bold", "font-size:32px");
+          categoryName.textContent = category.nama_pelayanan; // Replace with your category name property
+
+          nameCol.appendChild(categoryName);
+          const iconCol = document.createElement("div");
+          iconCol.classList.add("col-3", "d-flex", "align-items-center", "justify-content-end");
+          const icon = document.createElement("img");
+          icon.src = `http://localhost/laravel-10/antrianpos-app/public/icon/${category.image}`;
+          icon.alt = "icon-loket";
+          icon.style.width = "80px";
+          icon.style.height = "80px";
+
+          iconCol.appendChild(icon);
+          row.appendChild(nameCol);
+          row.appendChild(iconCol);
+          card.appendChild(row);
+          categoryContainer.appendChild(card);
+        });
+      })();
+
+      $(".card").click(function () {
+        const kategoriId = $(this).data("categoryId");
+        createAntrian(kategoriId);
+      });
+
+      function createAntrian(kategoriId) {
+        fetch(`http://localhost/laravel-10/antrianpos-app/public/createForm/${kategoriId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}", // Tambahkan header X-CSRF-TOKEN
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              // Tampilkan alert sukses
+              toast.fire({
+                icon: "success",
+                title: "Berhasil membuat antrian",
+              });
+              displayAntrian(data.dataForm);
+              location.reload(); // Muat ulang halaman
+            } else {
+              // Tampilkan alert error
+              toast.fire({
+                icon: "failed",
+                title: "Gagal membuat antrian: " + data.message,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+    <!-- Time Footer-->
+    <script>
+      $(function () {
+        function updateClock() {
+          var date = new Date();
+          var dateOptions = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          var timeOptions = {
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          };
+          var formattedDate = date.toLocaleDateString("id-ID", dateOptions);
+          var formattedTime = date.toLocaleTimeString("id-ID", timeOptions).replace("Pukul ", "").replace(/\./g, ":");
+          $("#datetime").html(formattedDate + " " + formattedTime);
+        }
+        setInterval(updateClock, 1000);
+
+        updateClock();
+      });
+    </script>
+  </body>
+</html>
+
+<!-- const card = document.querySelectorAll(".card");
+      card.forEach((smallBox) => {
+        smallBox.addEventListener("click", () => {
+          const kategoriId = smallBox.dataset.kategoriId;
+          createAntrian(kategoriId); // Panggil fungsi createAntrian
+        });
+      }); -->
