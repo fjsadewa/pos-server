@@ -1,3 +1,7 @@
+.content{
+    background-color: #1b2c5a;
+    padding: 2;
+}
 
 .card {
     background-color: #fff;
@@ -5,6 +9,7 @@
     margin-bottom: 10px;
     width: 400px ;
 }
+
 
 .card-body {
     padding: 5px;
@@ -14,11 +19,15 @@
     color: #333;
 }
 
+
 .col-md-5, .col-sm-5 {
     margin: 0 20px;
-}
+} 
 
 .container-fluid {
     padding: 0 20px;
 }
     
+.info-box{
+    background-color: #ee3f22;
+}

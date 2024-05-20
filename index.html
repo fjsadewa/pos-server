@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="csrf-token" value="{{ csrf_token() }}" />
     <title>POS INDONESIA | Sistem Antrian</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
@@ -44,7 +45,7 @@
       </div>
 
       <!-- Main Content -->
-      <div class="content p-2" style="background-color: #1b2c5a">
+      <div class="content">
         <div class="container-fluid">
           <div class="row" style="justify-content: center">
             <!-- /.Carousel-->
@@ -73,9 +74,9 @@
             <!-- /.card -->
           </div>
 
-          <div class="col-md-5" style="justify-content: center">
-            <div class="row">
-              <div class="info-box" style="background-color: #ee3f22">
+          <div class="col-md-5">
+            <div class="row" style="justify-content: center">
+              <div class="info-box">
                 <div class="info-box-content">
                   <h2 class="info-box-text text-center" style="font-weight: bold; color: #fff !important">PILIH ANTRIAN LOKET</h2>
                 </div>
@@ -106,10 +107,7 @@
           </div>
           <div class="col-md-10 marquee-content-footer">
             <marquee scrollamount="10" style="white-space: nowrap; overflow: hidden">
-              <h4 class="font-weight-bold">
-                Kantor POS Indonesia Cabang Utama Malang | Cargo & Freight Company | 🕗 24 Jam | Customer Service (WA Only) 0856 4801 8702 & 085791673245 | Gratis Pick Up/Jemput Paket Hub.
-                081133365100 | FB: posindonesiamalang | Instagram: posaja_malang | Copyright © 2024 POS INDONESIA. All rights reserved.
-              </h4>
+              <h4 class="font-weight-bold">Footer Text</h4>
             </marquee>
           </div>
         </div>
@@ -166,19 +164,33 @@
         }
       });
     </script>
-    <!-- Create Antrian -->
-    <script type="application/javascript">
+    <!-- Display -->
+    <script>
       var toast = Swal.mixin({
         toast: true,
         position: "top-end",
         showConfirmButton: false,
         timer: 1500,
       });
+      const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
 
       // Create Option
       (async () => {
-        const categories = await fetch("http://localhost/laravel-10/antrianpos-app/public/form"); // Replace with your API endpoint URL if applicable
+        const footer = await fetch(`${baseUrl}/footer`);
+        const footerData = await footer.json();
+        updateFooterContent(footerData);
+
+        const categories = await fetch(`${baseUrl}/form`);
         const categoryData = await categories.json();
+        createCardForm(categoryData);
+      })();
+
+      function updateFooterContent(footerData) {
+        const footerMarquee = document.querySelector(".marquee-content-footer marquee h4");
+        footerMarquee.textContent = footerData.text;
+      }
+
+      function createCardForm(categoryData) {
         const categoryContainer = document.getElementById("category-container");
         categoryData.forEach((category) => {
           const card = document.createElement("div");
@@ -187,63 +199,82 @@
 
           const row = document.createElement("div");
           row.classList.add("row");
+
           const nameCol = document.createElement("div");
           nameCol.classList.add("col-9", "d-flex", "flex-column", "align-items-center", "justify-content-center");
           const categoryName = document.createElement("h3");
           categoryName.classList.add("card-text", "font-weight-bold", "font-size:32px");
-          categoryName.textContent = category.nama_pelayanan; // Replace with your category name property
-
+          categoryName.textContent = category.nama_pelayanan;
           nameCol.appendChild(categoryName);
+
           const iconCol = document.createElement("div");
           iconCol.classList.add("col-3", "d-flex", "align-items-center", "justify-content-end");
           const icon = document.createElement("img");
-          icon.src = `http://localhost/laravel-10/antrianpos-app/public/icon/${category.image}`;
+          icon.src = `${baseUrl}/icon/${category.image}`;
           icon.alt = "icon-loket";
-          icon.style.width = "80px";
-          icon.style.height = "80px";
-
+          icon.style.width = "60px";
+          icon.style.height = "60px";
           iconCol.appendChild(icon);
+
           row.appendChild(nameCol);
           row.appendChild(iconCol);
           card.appendChild(row);
+
+          // Add loading state element (initially hidden)
+          const loadingOverlay = document.createElement("div");
+          loadingOverlay.classList.add("overlay", "dark", "d-none"); // Initially hidden
+          const loadingIcon = document.createElement("i");
+          loadingIcon.classList.add("fas", "fa-2x", "fa-sync-alt");
+          loadingOverlay.appendChild(loadingIcon);
+          card.appendChild(loadingOverlay);
+
           categoryContainer.appendChild(card);
-        });
-      })();
 
-      $(".card").click(function () {
-        const kategoriId = $(this).data("categoryId");
-        createAntrian(kategoriId);
-      });
+          // Event listener with click prevention
+          card.addEventListener("click", async (event) => {
+            if (loadingOverlay.classList.contains("d-none")) {
+              // Only proceed if not already loading
+              const kategoriId = event.currentTarget.dataset.categoryId;
+              console.log("Clicked Category ID:", kategoriId);
 
-      function createAntrian(kategoriId) {
-        fetch(`http://localhost/laravel-10/antrianpos-app/public/createForm/${kategoriId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}", // Tambahkan header X-CSRF-TOKEN
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              // Tampilkan alert sukses
-              toast.fire({
-                icon: "success",
-                title: "Berhasil membuat antrian",
-              });
-              displayAntrian(data.dataForm);
-              location.reload(); // Muat ulang halaman
-            } else {
-              // Tampilkan alert error
-              toast.fire({
-                icon: "failed",
-                title: "Gagal membuat antrian: " + data.message,
-              });
+              // Show loading state
+              loadingOverlay.classList.remove("d-none");
+
+              setTimeout(async () => {
+                try {
+                  const response = await fetch(`${baseUrl}/api/createForm/${kategoriId}`, {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      "X-CSRF-TOKEN": $('meta[name="csrf-token"]').val(),
+                    },
+                  });
+
+                  const data = await response.json();
+                  const csrfToken = data.token;
+
+                  if (data.success) {
+                    toast.fire({
+                      icon: "success",
+                      title: "Berhasil membuat antrian",
+                    });
+                    //location.reload(); // Optional reload behavior
+                  } else {
+                    toast.fire({
+                      icon: "failed",
+                      title: "Gagal membuat antrian: " + data.message,
+                    });
+                  }
+                } catch (error) {
+                  console.error("Error:", error);
+                } finally {
+                  // Always hide loading state after the request completes (success or error)
+                  loadingOverlay.classList.add("d-none");
+                }
+              }, 3000);
             }
-          })
-          .catch((error) => {
-            console.error("Error:", error);
           });
+        });
       }
     </script>
     <!-- Time Footer-->
@@ -275,10 +306,165 @@
   </body>
 </html>
 
-<!-- const card = document.querySelectorAll(".card");
-      card.forEach((smallBox) => {
-        smallBox.addEventListener("click", () => {
-          const kategoriId = smallBox.dataset.kategoriId;
-          createAntrian(kategoriId); // Panggil fungsi createAntrian
+<!-- function createCardForm(categoryData) {
+    const categoryContainer = document.getElementById("category-container");
+    categoryData.forEach((category) => {
+      const card = document.createElement("div");
+      card.classList.add("col", "card", "p-3");
+      card.dataset.categoryId = category.id;
+
+      const row = document.createElement("div");
+      row.classList.add("row");
+
+      const nameCol = document.createElement("div");
+      nameCol.classList.add("col-9", "d-flex", "flex-column", "align-items-center", "justify-content-center");
+      const categoryName = document.createElement("h3");
+      categoryName.classList.add("card-text", "font-weight-bold", "font-size:32px");
+      categoryName.textContent = category.nama_pelayanan;
+      nameCol.appendChild(categoryName);
+
+      const iconCol = document.createElement("div");
+      iconCol.classList.add("col-3", "d-flex", "align-items-center", "justify-content-end");
+      const icon = document.createElement("img");
+      icon.src = `${baseUrl}/icon/${category.image}`;
+      icon.alt = "icon-loket";
+      icon.style.width = "60px";
+      icon.style.height = "60px";
+      iconCol.appendChild(icon);
+
+      row.appendChild(nameCol);
+      row.appendChild(iconCol);
+      card.appendChild(row);
+
+      // Add loading state element (initially hidden)
+      const loadingOverlay = document.createElement("div");
+      loadingOverlay.classList.add("overlay", "dark", "d-none"); // Initially hidden
+      const loadingIcon = document.createElement("i");
+      loadingIcon.classList.add("fas", "fa-2x", "fa-sync-alt");
+      loadingOverlay.appendChild(loadingIcon);
+      card.appendChild(loadingOverlay);
+
+      categoryContainer.appendChild(card);
+
+      // Event listener with click prevention
+      card.addEventListener("click", async (event) => {
+        if (loadingOverlay.classList.contains("d-none")) { // Only proceed if not already loading
+          const kategoriId = event.currentTarget.dataset.categoryId;
+          console.log("Clicked Category ID:", kategoriId);
+
+          // Show loading state
+          loadingOverlay.classList.remove("d-none");
+
+          try {
+            const response = await fetch(`${baseUrl}/api/createForm/${kategoriId}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').val(),
+              },
+            });
+
+            const data = await response.json();
+            const csrfToken = data.token;
+
+            if (data.success) {
+              toast.fire({
+                icon: "success",
+                title: "Berhasil membuat antrian",
+              });
+              //location.reload(); // Optional reload behavior
+            } else {
+              toast.fire({
+                icon: "failed",
+                title: "Gagal membuat antrian: " + data.message,
+              });
+            }
+          } catch (error) {
+            console.error("Error:", error);
+          } finally {
+            // Always hide loading state after the request completes (success or error)
+            loadingOverlay.classList.add("d-none");
+          }
+        }
+      });
+    }); -->
+
+<!-- 
+      function createCardForm(categoryData) {
+        const categoryContainer = document.getElementById("category-container");
+        categoryData.forEach((category) => {
+          const card = document.createElement("div");
+          card.classList.add("col", "card", "p-3");
+          card.dataset.categoryId = category.id;
+
+          const row = document.createElement("div");
+          row.classList.add("row");
+          const nameCol = document.createElement("div");
+          nameCol.classList.add("col-9", "d-flex", "flex-column", "align-items-center", "justify-content-center");
+          const categoryName = document.createElement("h3");
+          categoryName.classList.add("card-text", "font-weight-bold", "font-size:32px");
+          categoryName.textContent = category.nama_pelayanan;
+
+          nameCol.appendChild(categoryName);
+          const iconCol = document.createElement("div");
+          iconCol.classList.add("col-3", "d-flex", "align-items-center", "justify-content-end");
+          const icon = document.createElement("img");
+          icon.src = `${baseUrl}/icon/${category.image}`;
+          icon.alt = "icon-loket";
+          icon.style.width = "60px";
+          icon.style.height = "60px";
+
+          iconCol.appendChild(icon);
+          row.appendChild(nameCol);
+          row.appendChild(iconCol);
+          card.appendChild(row);
+          categoryContainer.appendChild(card);
         });
-      }); -->
+      }
+
+      $("#category-container").on("click", ".card", function () {
+        const kategoriId = $(this).data("categoryId");
+        console.log("Clicked Category ID:", kategoriId);
+        createAntrian(kategoriId);
+      });
+
+      function createAntrian(kategoriId) {
+        fetch(`${baseUrl}/api/createForm/${kategoriId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').val(),
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            const csrfToken = data.token;
+            if (data.success) {
+              toast.fire({
+                icon: "success",
+                title: "Berhasil membuat antrian",
+              });
+              //location.reload();
+            } else {
+              toast.fire({
+                icon: "failed",
+                title: "Gagal membuat antrian: " + data.message,
+              });
+            }
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    
+     -->
+
+<!-- 
+  fetch(`${baseUrl}/createForm/${kategoriId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}",
+          },
+        })
+-->
