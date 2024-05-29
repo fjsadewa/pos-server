@@ -1,6 +1,11 @@
 .content{
     background-color: #1b2c5a;
-    padding: 2;
+    padding: 2px;
+}
+
+#video{
+    width: 100%;
+    padding: 2px;
 }
 
 .card {
@@ -28,6 +33,14 @@
     padding: 0 20px;
 }
     
-.info-box{
+.info-box, .petugas-card{
     background-color: #ee3f22;
+}
+
+#box-title{
+    background-color: #fff;
+}
+
+#antrian-card{
+    width: 100%;
 }

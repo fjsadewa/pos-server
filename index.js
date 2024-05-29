@@ -11,6 +11,10 @@ app.get('/', async (req, res) => {
       res.sendFile(join(__dirname, 'index.html'));
   });
 
+app.get('/display', async (req, res) => {
+      res.sendFile(join(__dirname, 'display.html'));
+  });
+
 app.use(express.static(__dirname + '/public'));
 
 app.get('/call', (req, res) => {
