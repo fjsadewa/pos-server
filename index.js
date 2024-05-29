@@ -12,8 +12,14 @@ app.get('/', async (req, res) => {
   });
 
 app.get('/display', async (req, res) => {
-      res.sendFile(join(__dirname, 'display.html'));
-  });
+  res.sendFile(join(__dirname, 'display.html'));
+});
+
+app.get('/show', (req, res) => {
+  res.header('Access-Control-Allow-Origin','*');
+  io.emit('show', req.query.list);
+  res.send('showing');
+});
 
 app.use(express.static(__dirname + '/public'));
 

@@ -77,17 +77,17 @@
                                 </div>
                                 <div class="card-body d-flex flex-column align-items-center">
                                 <br>
-                                <h3 id="nomorAntrian" style="font-weight: bold; font-size: 4.5rem;">A - 0001</h3>
+                                <h3 id="nomorAntrian" style="font-weight: bold; font-size: 4.5rem;">-</h3>
                                 <br>
-                                <h3 id="loketPelayanan" style="font-weight: bold; font-size: 2rem;">Loket 2 - Customer Service</h3>
+                                <h3 id="loketPelayanan" style="font-weight: bold; font-size: 2rem;">-</h3>
                                 <br>
                                 </div>
                                 <div class="petugas-card">
                                     <div class="card-body d-flex flex-column align-items-center">
                                         <h2 class="card-title text-white" style="font-weight: bold;">Petugas</h2>
                                         <div class="petugas-info d-flex align-items-center">
-                                            <h4 class="text-white flex-grow-1">Nicole Pearson</h4>
-                                            <img src="{{ asset('lte/dist/img/user1-128x128.jpg') }}" alt="user-avatar" class="img-fluid rounded-circle" style="width: 4rem; height: 4rem;">
+                                            <h4 class="text-white flex-grow-1">-</h4>
+                                            <!-- <img src="{{ asset('lte/dist/img/user1-128x128.jpg') }}" alt="user-avatar" class="img-fluid rounded-circle" style="width: 4rem; height: 4rem;"> -->
                                         </div>
                                     </div>
                                 </div>
@@ -137,7 +137,29 @@
         <!-- Showtime -->
         <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
         <!-- Show Queue -->
+        <script>
+            const socket = io();
+            var list = [];
+            socket.on("show", (msg) => {
+                console.log(msg);
+                list = msg;
+                showAntrian();
+            });
 
+            function showAntrian() {
+                const card = document.getElementById('antrian-card');
+
+                const nomorAntrianElement = card.querySelector('#nomorAntrian');
+                const loketPelayananElement = card.querySelector('#loketPelayanan');
+                const petugasNameElement = card.querySelector('.petugas-info h4'); 
+
+                //const formattedNomor = list[4].padStart(4, '0');
+                nomorAntrianElement.textContent = `A - ${list[1]}`;
+                loketPelayananElement.textContent = `Loket ${list[2]} - ${String(list[4]).padStart(4, '0')}`;
+                petugasNameElement.textContent = list[3]; 
+
+            }
+        </script>
         <!-- Display -->
         <script>
             var toast = Swal.mixin({
@@ -167,46 +189,46 @@
 
             function createQueueList(queueData) {
                 const antrianContainer = document.getElementById("listAntrian");
-              
+            
                 queueData.forEach(queue => {
-                  const cardElement = document.createElement('div');
-                  cardElement.classList.add('col');
-                  cardElement.id = 'kolomAntrian';
-              
-                  const card = document.createElement('div');
-                  card.classList.add('card');
-                  card.id = 'antrian';
-              
-                  const cardHeaderElement = document.createElement('div');
-                  cardHeaderElement.classList.add('card-header');
-                  const cardTitleElement = document.createElement('h3');
-                  cardTitleElement.classList.add('card-title');
-                  cardTitleElement.style.fontWeight = 'bold';
-                  cardTitleElement.style.fontSize = '28px';
-                  cardTitleElement.textContent = queue.nama_pelayanan;
-                  cardHeaderElement.appendChild(cardTitleElement);
-              
-                  const cardBodyElement = document.createElement('div');
-                  cardBodyElement.classList.add('card-body');
-                  const nomorAntrianElement = document.createElement('h3');
-                  nomorAntrianElement.style.fontWeight = 'bold';
-                  nomorAntrianElement.style.fontSize = '50px';
-                  nomorAntrianElement.textContent = `${queue.kode_pelayanan} - ${formatNomorUrut(queue.nomor_urut)}`;
-                  cardBodyElement.appendChild(nomorAntrianElement);
-              
-                  card.appendChild(cardHeaderElement);
-                  card.appendChild(cardBodyElement);
-              
-                  cardElement.appendChild(card);
-                  antrianContainer.appendChild(cardElement);
+                    const cardElement = document.createElement('div');
+                    cardElement.classList.add('col');
+                    cardElement.id = 'kolomAntrian';
+                
+                    const card = document.createElement('div');
+                    card.classList.add('card');
+                    card.id = 'antrian';
+                
+                    const cardHeaderElement = document.createElement('div');
+                    cardHeaderElement.classList.add('card-header');
+                    const cardTitleElement = document.createElement('h3');
+                    cardTitleElement.classList.add('card-title');
+                    cardTitleElement.style.fontWeight = 'bold';
+                    cardTitleElement.style.fontSize = '28px';
+                    cardTitleElement.textContent = queue.nama_pelayanan;
+                    cardHeaderElement.appendChild(cardTitleElement);
+                
+                    const cardBodyElement = document.createElement('div');
+                    cardBodyElement.classList.add('card-body');
+                    const nomorAntrianElement = document.createElement('h3');
+                    nomorAntrianElement.style.fontWeight = 'bold';
+                    nomorAntrianElement.style.fontSize = '50px';
+                    nomorAntrianElement.textContent = `${queue.kode_pelayanan} - ${queue.nomor_urut}`;
+                    cardBodyElement.appendChild(nomorAntrianElement);
+                
+                    card.appendChild(cardHeaderElement);
+                    card.appendChild(cardBodyElement);
+                
+                    cardElement.appendChild(card);
+                    antrianContainer.appendChild(cardElement);
                 });
-              }
-              
-              function formatNomorUrut(nomor) {
+            }
+            
+            function formatNomorUrut(nomor) {
                 const formattedNomor = `${nomor}`.padStart(4, '0');
                 return formattedNomor;
-              }
-              
+            }
+            
         </script>
         <!-- Time Footer-->
         <script>
