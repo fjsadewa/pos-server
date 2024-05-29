@@ -44,3 +44,38 @@
 #antrian-card{
     width: 100%;
 }
+
+#listAntrian{
+    display: flex;
+    flex-wrap: wrap;
+    text-align: center;
+}
+#kolomAntrian {
+    flex: 0 0 25%;
+    box-sizing: border-box; 
+}
+
+#antrian {
+    width: 100%;
+}
+
+#antrian .card-body{
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center;
+    height: 150px;
+}
+
+@media (max-width: 768px) { 
+    #kolomAntrian {
+      flex: 0 0 50%; 
+    }
+}
+  
+@media (max-width: 480px) {  
+    #kolomAntrian {
+      flex: 0 0 100%; 
+    }
+}
+  

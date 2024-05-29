@@ -63,14 +63,14 @@
         
                     <!-- Antrian dalam panggilan -->
                     <div class="col-lg-4 text-center">
-                        <div class="row" style="justify-content: center">
+                        <!-- <div class="row" style="justify-content: center">
                             <div class="info-box" id="box-title">
                                 <div class="info-box-content">
                                     <h2 class="info-box-text text-center" style="font-weight: bold;font-size:medium">Panggilan Untuk</h2>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
+                        </div> -->
+                        <!-- <div class="row"> -->
                             <div class="card" id="antrian-card">
                                 <div class="card-header">
                                     <h3 class="card-title" style="font-weight: bold; font-size: 1.5rem;">Nomor Antrian</h3>
@@ -92,12 +92,13 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        <!-- </div> -->
                     </div>
                     <!-- /.col -->
                     <!-- /.Antrian dalam panggilan -->
                 </div>
                 <!-- /.row -->
+                <div class="row" id="listAntrian"></div>
             </div>
         </div>
         <!-- /.content -->
@@ -146,18 +147,66 @@
                 timer: 1500,
                 });
             const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
-        
+
             // Create Option
             (async () => {
-            const footer = await fetch(`${baseUrl}/footer`);
-            const footerData = await footer.json();
-            updateFooterContent(footerData);
+                const queue = await fetch(`${baseUrl}/display`);
+                const queueData = await queue.json();
+                //console.log(queueData);
+                createQueueList(queueData);
+
+                const footer = await fetch(`${baseUrl}/footer`);
+                const footerData = await footer.json();
+                updateFooterContent(footerData);
             })();
         
             function updateFooterContent(footerData) {
                 const footerMarquee = document.querySelector(".marquee-content-footer marquee h4");
                 footerMarquee.textContent = footerData.text;
             }
+
+            function createQueueList(queueData) {
+                const antrianContainer = document.getElementById("listAntrian");
+              
+                queueData.forEach(queue => {
+                  const cardElement = document.createElement('div');
+                  cardElement.classList.add('col');
+                  cardElement.id = 'kolomAntrian';
+              
+                  const card = document.createElement('div');
+                  card.classList.add('card');
+                  card.id = 'antrian';
+              
+                  const cardHeaderElement = document.createElement('div');
+                  cardHeaderElement.classList.add('card-header');
+                  const cardTitleElement = document.createElement('h3');
+                  cardTitleElement.classList.add('card-title');
+                  cardTitleElement.style.fontWeight = 'bold';
+                  cardTitleElement.style.fontSize = '28px';
+                  cardTitleElement.textContent = queue.nama_pelayanan;
+                  cardHeaderElement.appendChild(cardTitleElement);
+              
+                  const cardBodyElement = document.createElement('div');
+                  cardBodyElement.classList.add('card-body');
+                  const nomorAntrianElement = document.createElement('h3');
+                  nomorAntrianElement.style.fontWeight = 'bold';
+                  nomorAntrianElement.style.fontSize = '50px';
+                  nomorAntrianElement.textContent = `${queue.kode_pelayanan} - ${formatNomorUrut(queue.nomor_urut)}`;
+                  cardBodyElement.appendChild(nomorAntrianElement);
+              
+                  card.appendChild(cardHeaderElement);
+                  card.appendChild(cardBodyElement);
+              
+                  cardElement.appendChild(card);
+                  antrianContainer.appendChild(cardElement);
+                });
+              }
+              
+              function formatNomorUrut(nomor) {
+                const formattedNomor = `${nomor}`.padStart(4, '0');
+                return formattedNomor;
+              }
+              
         </script>
         <!-- Time Footer-->
         <script>

@@ -18,7 +18,6 @@ app.get('/display', async (req, res) => {
 app.use(express.static(__dirname + '/public'));
 
 app.get('/call', (req, res) => {
-
   res.header('Access-Control-Allow-Origin','*');
   io.emit('call', req.query.sequence);
   res.send('calling');
