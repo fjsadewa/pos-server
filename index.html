@@ -171,6 +171,7 @@
         timer: 1500,
       });
       const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
+      //const { print } = require('./index');
 
       // Create Option
       (async () => {
@@ -228,14 +229,11 @@
 
           categoryContainer.appendChild(card);
 
-          // Event listener with click prevention
           card.addEventListener("click", async (event) => {
             if (loadingOverlay.classList.contains("d-none")) {
-              // Only proceed if not already loading
               const kategoriId = event.currentTarget.dataset.categoryId;
               console.log("Clicked Category ID:", kategoriId);
 
-              // Show loading state
               loadingOverlay.classList.remove("d-none");
 
               setTimeout(async () => {
@@ -257,6 +255,7 @@
                       title: "Berhasil membuat antrian",
                     });
                     //location.reload(); // Optional reload behavior
+                    await printAntrian(){}
                   } else {
                     toast.fire({
                       icon: "failed",
@@ -266,13 +265,36 @@
                 } catch (error) {
                   console.error("Error:", error);
                 } finally {
-                  // Always hide loading state after the request completes (success or error)
                   loadingOverlay.classList.add("d-none");
                 }
               }, 3000);
             }
           });
         });
+      }
+
+      async function printAntrian() {
+        try {
+          const printer = new ThermalPrinter({
+            name: 'My Thermal Printer',
+            width: 80,
+            characterSet: 'A', // Karakter set (ASCII, CP437, etc.)
+            port: '/dev/usb/lp0', // Port koneksi printer (misalnya, USB)
+            baudRate: 9600, // Kecepatan baud rate (untuk koneksi serial)
+            margins: {
+              top: 10, // Margin atas dalam milimeter
+              left: 15, // Margin kiri dalam milimeter
+              right: 15, // Margin kanan dalam milimeter
+              bottom: 10 // Margin bawah dalam milimeter
+            }
+          });
+          await printer.print("PT. POS INDONESIA\n");
+          await printer.print(`${data.nama_pelayanan} - Antrian Berhasil\n`);
+          // Add other printing logic based on your data
+          await printer.cut();
+        } catch (error) {
+          console.error("Error printing:", error);
+        }
       }
     </script>
     <!-- Time Footer-->

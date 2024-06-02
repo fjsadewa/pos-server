@@ -2,6 +2,7 @@ const express = require('express');
 const { createServer } = require('node:http');
 const { join } = require('node:path');
 const { Server } = require('socket.io');
+const ThermalPrinter = require('node-thermal-printer');
 
 const app = express();
 const server = createServer(app);
@@ -27,6 +28,24 @@ app.get('/call', (req, res) => {
   res.header('Access-Control-Allow-Origin','*');
   io.emit('call', req.query.sequence);
   res.send('calling');
+});
+
+app.post('/print', async (req, res) => {
+  const data = req.body.data; // Dapatkan data cetak dari request body
+  const printer = new ThermalPrinter({
+    width: 80,
+    characterSet: 'A'
+  });
+
+  try {
+    await printer.print(data); // Cetak data ke printer
+    res.status(200).send('Data dicetak dengan sukses!');
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Gagal mencetak data!');
+  } finally {
+    await printer.close(); // Tutup koneksi dengan printer
+  }
 });
 
 io.on('connection', (socket) => {
