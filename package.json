@@ -6,6 +6,7 @@
     "dependencies": {
         "body-parser": "^1.20.2",
         "express": "^4.19.2",
+        "node-thermal-printer": "^4.4.2",
         "parse-request": "^6.0.2",
         "socket.io": "^4.7.5"
     }

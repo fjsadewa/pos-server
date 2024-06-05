@@ -15,10 +15,139 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="lte/dist/css/adminlte.min.css" />
     <link rel="stylesheet" href="style.css" />
+    <style>
+      .Main {
+        width: 272px;
+        height: 272px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+        display: inline-flex;
+      }
+    
+      .Header {
+        justify-content: flex-start;
+        align-items: flex-start;
+        gap: 20px;
+        display: inline-flex;
+      }
+    
+      .LogoPos {
+        width: 43px;
+        height: 38px;
+      }
+    
+      .HeaderContent {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        display: inline-flex;
+      }
+    
+      .Content {
+        color: black;
+        font-size: 14px;
+        font-family: Poppins;
+        font-weight: 600;
+        word-wrap: break-word;
+      }
+    
+      .HeaderSentences {
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        display: flex;
+      }
+    
+      .Sentences {
+        color: black;
+        font-size: 12px;
+        font-family: Poppins;
+        font-weight: 500;
+        word-wrap: break-word;
+      }
+    
+      .Line1 {
+        width: 220px;
+        height: 0px;
+        border: 2px black dotted;
+      }
+    
+      .Datetime,
+      .Queue,
+      .Body,
+      .Keterangan {
+        color: black;
+        font-family: Poppins;
+        word-wrap: break-word;
+      }
+    
+      .Datetime {
+        font-size: 10px;
+        font-weight: 400;
+      }
+    
+      .Queue {
+        font-size: 32px;
+        font-weight: 600;
+        text-align: center;
+      }
+    
+      .Body {
+        width: 145px;
+        height: 18px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        display: inline-flex;
+      }
+    
+      .BodySen {
+        font-size: 12px;
+        font-weight: 500;
+      }
+    
+      .Keterangan {
+        font-size: 18px;
+        font-weight: 600;
+      }
+    
+      .Tail {
+        width: 220px;
+        height: 27px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 15px;
+        display: inline-flex;
+      }
+    
+      .Line2 {
+        width: 220px;
+        height: 0px;
+        border: 2px black dotted;
+      }
+    
+      .Add {
+        color: black;
+        font-size: 8px;
+        font-family: Poppins;
+        font-weight: 400;
+        word-wrap: break-word;
+      }
+
+      @media print {
+         body {
+          zoom: 500%;
+        }
+        /* ... the rest of the rules ... */
+      }
+    </style>
   </head>
 
   <body>
-    <div class="wrapper hw-100">
+    <div id="non-print-area" class="wrapper hw-100">
       <!-- Navbar -->
       <div class="row m-3s">
         <div class="col-lg-12">
@@ -117,6 +246,31 @@
       <source id="mp3_src" src="" type="audio/wav" />
       Your browser does not support the audio element.
     </audio>
+    </div>
+    <div id="print-area">
+      <div class="Main">
+        <div class="Header">
+          <img class="LogoPos" src="gambar/Pos-Ind.png" />
+          <div class="HeaderContent">
+            <div class="Content">PT. POS INDONESIA</div>
+            <div class="HeaderSentences">
+              <div class="Sentences">KCU MALANG</div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="Line1"></div>
+      
+        <div class="Datetime" id="timestamp"></div>
+        <div class="Queue" id="antrian"></div>
+        <div class="Keterangan" id="namaPelayanan"></div>
+      
+        <div class="Tail">
+          <div class="Line2"></div>
+          <div class="Add">ADDITIONAL TEXT MAX. 100 CHAR</div>
+        </div>
+      </div>
+    </div>
     <script src="lte/plugins/jquery/jquery.min.js"></script>
     <!-- Bootstrap -->
     <script src="lte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -171,9 +325,6 @@
         timer: 1500,
       });
       const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
-      //const { print } = require('./index');
-
-      // Create Option
       (async () => {
         const footer = await fetch(`${baseUrl}/footer`);
         const footerData = await footer.json();
@@ -182,6 +333,10 @@
         const categories = await fetch(`${baseUrl}/form`);
         const categoryData = await categories.json();
         createCardForm(categoryData);
+
+        const printIframe = document.createElement("iframe");
+        printIframe.style.display = "none";
+        document.body.appendChild(printIframe);
       })();
 
       function updateFooterContent(footerData) {
@@ -219,7 +374,6 @@
           row.appendChild(iconCol);
           card.appendChild(row);
 
-          // Add loading state element (initially hidden)
           const loadingOverlay = document.createElement("div");
           loadingOverlay.classList.add("overlay", "dark", "d-none"); // Initially hidden
           const loadingIcon = document.createElement("i");
@@ -233,7 +387,6 @@
             if (loadingOverlay.classList.contains("d-none")) {
               const kategoriId = event.currentTarget.dataset.categoryId;
               console.log("Clicked Category ID:", kategoriId);
-
               loadingOverlay.classList.remove("d-none");
 
               setTimeout(async () => {
@@ -248,14 +401,20 @@
 
                   const data = await response.json();
                   const csrfToken = data.token;
-
                   if (data.success) {
-                    toast.fire({
-                      icon: "success",
-                      title: "Berhasil membuat antrian",
-                    });
-                    //location.reload(); // Optional reload behavior
-                    await printAntrian(){}
+                    //toast.fire({
+                      //icon: "success",
+                      //title: "Berhasil membuat antrian",
+                    //});
+                    getAntrianData();
+
+                    //const file = document.querySelector("iframe");
+                    //file.src = "/print";
+                    //await new Promise((resolve) => (file.onload = resolve));
+                    //file.contentWindow.print();
+                    //setTimeout(() => {
+                    //  file.src = "";
+                    //}, 50);
                   } else {
                     toast.fire({
                       icon: "failed",
@@ -271,30 +430,6 @@
             }
           });
         });
-      }
-
-      async function printAntrian() {
-        try {
-          const printer = new ThermalPrinter({
-            name: 'My Thermal Printer',
-            width: 80,
-            characterSet: 'A', // Karakter set (ASCII, CP437, etc.)
-            port: '/dev/usb/lp0', // Port koneksi printer (misalnya, USB)
-            baudRate: 9600, // Kecepatan baud rate (untuk koneksi serial)
-            margins: {
-              top: 10, // Margin atas dalam milimeter
-              left: 15, // Margin kiri dalam milimeter
-              right: 15, // Margin kanan dalam milimeter
-              bottom: 10 // Margin bawah dalam milimeter
-            }
-          });
-          await printer.print("PT. POS INDONESIA\n");
-          await printer.print(`${data.nama_pelayanan} - Antrian Berhasil\n`);
-          // Add other printing logic based on your data
-          await printer.cut();
-        } catch (error) {
-          console.error("Error printing:", error);
-        }
       }
     </script>
     <!-- Time Footer-->
@@ -323,5 +458,78 @@
         updateClock();
       });
     </script>
+
+    
+<script>
+  $("#print-area").hide();
+  async function getAntrianData() {
+    try {
+      const response = await fetch(`${baseUrl}/getAntrian`);
+      const data = await response.json();
+
+      document.getElementById("antrian").textContent = `${data.kode_pelayanan} - ${data.nomor_urut}`;
+      document.getElementById("namaPelayanan").textContent = data.nama_pelayanan;
+      document.getElementById("timestamp").textContent = data.timestamp;
+      $("#non-print-area").hide();
+      $("#print-area").show();
+      setTimeout(()=>{
+        window.print();
+      },500);
+
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  window.onafterprint = function(){
+    console.log("Printing completed...");
+    //$("#non-print-area").show();
+      //$("#print-area").hide();
+ }
+ 
+</script>
   </body>
 </html>
+
+<!-- 
+  async function printAntrian() {
+        try {
+          const printer = new ThermalPrinter({
+            name: "My Thermal Printer",
+            width: 80,
+            characterSet: "A", // Karakter set (ASCII, CP437, etc.)
+            port: "/dev/usb/lp0", // Port koneksi printer (misalnya, USB)
+            baudRate: 9600, // Kecepatan baud rate (untuk koneksi serial)
+            margins: {
+              top: 10, // Margin atas dalam milimeter
+              left: 15, // Margin kiri dalam milimeter
+              right: 15, // Margin kanan dalam milimeter
+              bottom: 10, // Margin bawah dalam milimeter
+            },
+          });
+          await printer.print("PT. POS INDONESIA\n");
+          await printer.print(`${data.nama_pelayanan} - Antrian Berhasil\n`);
+          // Add other printing logic based on your data
+          await printer.cut();
+        } catch (error) {
+          console.error("Error printing:", error);
+        }
+      }
+
+
+      //$.ajax({
+                    //  url: "http://localhost:3000/print-queue",
+                    //  method: "GET",
+                    //  success: function (response) {
+                    //    alert(response.message);
+                    //  },
+                    //  error: function (error) {
+                    //    console.error("Error:", error);
+                    //    alert("Gagal mencetak data antrian");
+                    //  },
+                    //});
+
+                    
+                    //location.reload(); // Optional reload behavior
+                    //await printAntrian(){}
+ -->
