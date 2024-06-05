@@ -137,9 +137,26 @@
         word-wrap: break-word;
       }
 
+      .print-area{
+        visibility: hidden;
+      }
+
       @media print {
          body {
-          zoom: 500%;
+          visibility: hidden;
+        }
+
+        .print-area{
+          visibility: visible;
+          position: absolute;
+          margin: 0;
+          left: 40%;
+          top: 30%;
+          transform: scale(5);
+        }
+
+        .non-print-area{
+          visibility: hidden;
         }
         /* ... the rest of the rules ... */
       }
@@ -147,7 +164,7 @@
   </head>
 
   <body>
-    <div id="non-print-area" class="wrapper hw-100">
+    <div class="wrapper hw-100 non-print-area">
       <!-- Navbar -->
       <div class="row m-3s">
         <div class="col-lg-12">
@@ -247,7 +264,7 @@
       Your browser does not support the audio element.
     </audio>
     </div>
-    <div id="print-area">
+    <div class="print-area">
       <div class="Main">
         <div class="Header">
           <img class="LogoPos" src="gambar/Pos-Ind.png" />
@@ -267,7 +284,7 @@
       
         <div class="Tail">
           <div class="Line2"></div>
-          <div class="Add">ADDITIONAL TEXT MAX. 100 CHAR</div>
+          <div class="Add" id="extraText">ADDITIONAL TEXT MAX. 100 CHAR</div>
         </div>
       </div>
     </div>
@@ -389,7 +406,7 @@
               console.log("Clicked Category ID:", kategoriId);
               loadingOverlay.classList.remove("d-none");
 
-              setTimeout(async () => {
+              //setTimeout(async () => {
                 try {
                   const response = await fetch(`${baseUrl}/api/createForm/${kategoriId}`, {
                     method: "POST",
@@ -426,7 +443,7 @@
                 } finally {
                   loadingOverlay.classList.add("d-none");
                 }
-              }, 3000);
+              //}, 1000);
             }
           });
         });
@@ -470,11 +487,12 @@
       document.getElementById("antrian").textContent = `${data.kode_pelayanan} - ${data.nomor_urut}`;
       document.getElementById("namaPelayanan").textContent = data.nama_pelayanan;
       document.getElementById("timestamp").textContent = data.timestamp;
-      $("#non-print-area").hide();
-      $("#print-area").show();
-      setTimeout(()=>{
+      document.getElementById("extraText").textContent = data.addText;
+      //$("#non-print-area").hide();
+      //$("#print-area").show();
+      //setTimeout(()=>{
         window.print();
-      },500);
+      //},500);
 
     } catch (error) {
       console.error(error);
