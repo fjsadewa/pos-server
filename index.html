@@ -25,26 +25,26 @@
         gap: 15px;
         display: inline-flex;
       }
-    
+
       .Header {
         justify-content: flex-start;
         align-items: flex-start;
         gap: 20px;
         display: inline-flex;
       }
-    
+
       .LogoPos {
         width: 43px;
         height: 38px;
       }
-    
+
       .HeaderContent {
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
         display: inline-flex;
       }
-    
+
       .Content {
         color: black;
         font-size: 14px;
@@ -52,14 +52,14 @@
         font-weight: 600;
         word-wrap: break-word;
       }
-    
+
       .HeaderSentences {
         flex-direction: column;
         justify-content: flex-start;
         align-items: center;
         display: flex;
       }
-    
+
       .Sentences {
         color: black;
         font-size: 12px;
@@ -67,13 +67,13 @@
         font-weight: 500;
         word-wrap: break-word;
       }
-    
+
       .Line1 {
         width: 220px;
         height: 0px;
         border: 2px black dotted;
       }
-    
+
       .Datetime,
       .Queue,
       .Body,
@@ -82,18 +82,18 @@
         font-family: Poppins;
         word-wrap: break-word;
       }
-    
+
       .Datetime {
         font-size: 10px;
         font-weight: 400;
       }
-    
+
       .Queue {
         font-size: 32px;
         font-weight: 600;
         text-align: center;
       }
-    
+
       .Body {
         width: 145px;
         height: 18px;
@@ -102,17 +102,17 @@
         align-items: center;
         display: inline-flex;
       }
-    
+
       .BodySen {
         font-size: 12px;
         font-weight: 500;
       }
-    
+
       .Keterangan {
         font-size: 18px;
         font-weight: 600;
       }
-    
+
       .Tail {
         width: 220px;
         height: 27px;
@@ -122,13 +122,13 @@
         gap: 15px;
         display: inline-flex;
       }
-    
+
       .Line2 {
         width: 220px;
         height: 0px;
         border: 2px black dotted;
       }
-    
+
       .Add {
         color: black;
         font-size: 8px;
@@ -137,16 +137,17 @@
         word-wrap: break-word;
       }
 
-      .print-area{
+      .print-area {
+        display: none;
         visibility: hidden;
       }
 
       @media print {
-         body {
+        body {
           visibility: hidden;
         }
 
-        .print-area{
+        .print-area {
           visibility: visible;
           position: absolute;
           margin: 0;
@@ -155,16 +156,15 @@
           transform: scale(5);
         }
 
-        .non-print-area{
+        .non-print-area {
           visibility: hidden;
         }
-        /* ... the rest of the rules ... */
       }
     </style>
   </head>
 
   <body>
-    <div class="wrapper hw-100 non-print-area">
+    <div class="wrapper non-print-area">
       <!-- Navbar -->
       <div class="row m-3s">
         <div class="col-lg-12">
@@ -195,74 +195,77 @@
         <div class="container-fluid">
           <div class="row" style="justify-content: center">
             <!-- /.Carousel-->
-            <div class="col-md-5 d-flex justify-content-center align-items-center">
-              <div class="card p-1" style="height: 550px; width: 550px">
-                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" ">
-                <ol class="carousel-indicators">
-                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                  <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner">
-                  <div class="carousel-item active">
-                    <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="First slide" />
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="Second slide" />
-                  </div>
-                  <div class="carousel-item">
-                    <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="Third slide" />
-                  </div>
+            <div class="col-lg-7 d-flex justify-content-center">
+              <div id="carouselCard" class="card p-1">
+                <div class="carousel" data-ride="carousel">
+                  <div class="carousel-inner"></div>
+                  <ol class="carousel-indicators"></ol>
                 </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
 
-          <div class="col-md-5">
-            <div class="row" style="justify-content: center">
-              <div class="info-box">
-                <div class="info-box-content">
-                  <h2 class="info-box-text text-center" style="font-weight: bold; color: #fff !important">PILIH ANTRIAN LOKET</h2>
-                </div>
+                <!-- <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                  <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                  </ol>
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                      <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="First slide" />
+                    </div>
+                    <div class="carousel-item">
+                      <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="Second slide" />
+                    </div>
+                    <div class="carousel-item">
+                      <img class="d-flex w-100 h-100" src="gambar/banner.jpg" alt="Third slide" />
+                    </div>
+                  </div>
+                </div> -->
               </div>
             </div>
 
-            <div class="row d-flex justify-content-center">
-              <!-- Card -->
-              <div id="category-container"></div>
+            <div class="col-lg-5">
+              <div class="row" style="justify-content: center">
+                <div class="info-box">
+                  <div class="info-box-content">
+                    <h2 class="info-box-text text-center" style="font-weight: bold; color: #fff !important">PILIH ANTRIAN LOKET</h2>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row d-flex justify-content-center">
+                <!-- Card -->
+                <div id="category-container"></div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <!-- /.content -->
+      <!-- /.content -->
 
-    <!-- Footer -->
-    <div class="footer" style="background-color: #ee3f22 !important; color: #fff !important">
-      <div class="container-fluid">
-        <div class="row align-items-center">
-          <div class="col-md-2 pl-0 pr-1 datetime-content-footer text-center">
-            <div
-              id="datetime"
-              style="font: bold; font-size: 20px; padding: 3px; color: #000; background: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); border-radius: 4px; border-right: 2px #1b2c5a solid"
-            ></div>
-          </div>
-          <div class="col-md-10 marquee-content-footer">
-            <marquee scrollamount="10" style="white-space: nowrap; overflow: hidden">
-              <h4 class="font-weight-bold">Footer Text</h4>
-            </marquee>
+      <!-- Footer -->
+      <div class="footer" style="background-color: #ee3f22 !important; color: #fff !important">
+        <div class="container-fluid">
+          <div class="row align-items-center">
+            <div class="col-md-2 pl-0 pr-1 datetime-content-footer text-center">
+              <div
+                id="datetime"
+                style="font: bold; font-size: 20px; padding: 3px; color: #000; background: #fff; box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); border-radius: 4px; border-right: 2px #1b2c5a solid"
+              ></div>
+            </div>
+            <div class="col-md-10 marquee-content-footer">
+              <marquee scrollamount="10" style="white-space: nowrap; overflow: hidden">
+                <h4 class="font-weight-bold">Footer Text</h4>
+              </marquee>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- ./wrapper -->
-    <audio id="player" style="display: none">
-      <source id="mp3_src" src="" type="audio/wav" />
-      Your browser does not support the audio element.
-    </audio>
+      <!-- ./wrapper -->
+      <audio id="player" style="display: none">
+        <source id="mp3_src" src="" type="audio/wav" />
+        Your browser does not support the audio element.
+      </audio>
     </div>
     <div class="print-area">
       <div class="Main">
@@ -275,13 +278,13 @@
             </div>
           </div>
         </div>
-      
+
         <div class="Line1"></div>
-      
+
         <div class="Datetime" id="timestamp"></div>
         <div class="Queue" id="antrian"></div>
         <div class="Keterangan" id="namaPelayanan"></div>
-      
+
         <div class="Tail">
           <div class="Line2"></div>
           <div class="Add" id="extraText">ADDITIONAL TEXT MAX. 100 CHAR</div>
@@ -343,6 +346,11 @@
       });
       const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
       (async () => {
+        const banner = await fetch(`${baseUrl}/img`).then((response) => response.json());
+        //const bannerData = await banner.json();
+        console.log(banner);
+        displayBanners(banner);
+
         const footer = await fetch(`${baseUrl}/footer`);
         const footerData = await footer.json();
         updateFooterContent(footerData);
@@ -350,11 +358,36 @@
         const categories = await fetch(`${baseUrl}/form`);
         const categoryData = await categories.json();
         createCardForm(categoryData);
-
-        const printIframe = document.createElement("iframe");
-        printIframe.style.display = "none";
-        document.body.appendChild(printIframe);
       })();
+
+      function displayBanners(banners) {
+        const carouselInner = document.querySelector(".carousel-inner");
+        const carouselIndicators = document.querySelector(".carousel-indicators");
+
+        banners.forEach((banner, index) => {
+          const carouselItem = document.createElement("div");
+          carouselItem.classList.add("carousel-item");
+          if (index === 0) {
+            carouselItem.classList.add("active");
+          }
+
+          const imageElement = document.createElement("img");
+          imageElement.src = `http://localhost/laravel-10/antrianpos-app/public/banner/${banner}`;
+          imageElement.classList.add("carousel-img");
+
+          carouselItem.appendChild(imageElement);
+          carouselInner.appendChild(carouselItem);
+
+          const indicator = document.createElement("li");
+          indicator.dataTarget = "#carousel";
+          indicator.setAttribute("data-slide-to", index);
+          if (index === 0) {
+            indicator.classList.add("active");
+          }
+
+          carouselIndicators.appendChild(indicator);
+        });
+      }
 
       function updateFooterContent(footerData) {
         const footerMarquee = document.querySelector(".marquee-content-footer marquee h4");
@@ -407,42 +440,34 @@
               loadingOverlay.classList.remove("d-none");
 
               //setTimeout(async () => {
-                try {
-                  const response = await fetch(`${baseUrl}/api/createForm/${kategoriId}`, {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                      "X-CSRF-TOKEN": $('meta[name="csrf-token"]').val(),
-                    },
+              try {
+                const response = await fetch(`${baseUrl}/api/createForm/${kategoriId}`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').val(),
+                  },
+                });
+
+                const data = await response.json();
+                const csrfToken = data.token;
+                if (data.success) {
+                  toast.fire({
+                    icon: "success",
+                    title: "Berhasil membuat antrian",
                   });
-
-                  const data = await response.json();
-                  const csrfToken = data.token;
-                  if (data.success) {
-                    //toast.fire({
-                      //icon: "success",
-                      //title: "Berhasil membuat antrian",
-                    //});
-                    getAntrianData();
-
-                    //const file = document.querySelector("iframe");
-                    //file.src = "/print";
-                    //await new Promise((resolve) => (file.onload = resolve));
-                    //file.contentWindow.print();
-                    //setTimeout(() => {
-                    //  file.src = "";
-                    //}, 50);
-                  } else {
-                    toast.fire({
-                      icon: "failed",
-                      title: "Gagal membuat antrian: " + data.message,
-                    });
-                  }
-                } catch (error) {
-                  console.error("Error:", error);
-                } finally {
-                  loadingOverlay.classList.add("d-none");
+                  getAntrianData();
+                } else {
+                  toast.fire({
+                    icon: "failed",
+                    title: "Gagal membuat antrian: " + data.message,
+                  });
                 }
+              } catch (error) {
+                console.error("Error:", error);
+              } finally {
+                loadingOverlay.classList.add("d-none");
+              }
               //}, 1000);
             }
           });
@@ -475,37 +500,34 @@
         updateClock();
       });
     </script>
+    <!-- Print Ticket -->
+    <script>
+      $("#print-area").hide();
+      async function getAntrianData() {
+        try {
+          const response = await fetch(`${baseUrl}/getAntrian`);
+          const data = await response.json();
 
-    
-<script>
-  $("#print-area").hide();
-  async function getAntrianData() {
-    try {
-      const response = await fetch(`${baseUrl}/getAntrian`);
-      const data = await response.json();
+          document.getElementById("antrian").textContent = `${data.kode_pelayanan} - ${data.nomor_urut}`;
+          document.getElementById("namaPelayanan").textContent = data.nama_pelayanan;
+          document.getElementById("timestamp").textContent = data.timestamp;
+          document.getElementById("extraText").textContent = data.addText;
+          //$("#non-print-area").hide();
+          //$("#print-area").show();
+          //setTimeout(()=>{
+          window.print();
+          //},500);
+        } catch (error) {
+          console.error(error);
+        }
+      }
 
-      document.getElementById("antrian").textContent = `${data.kode_pelayanan} - ${data.nomor_urut}`;
-      document.getElementById("namaPelayanan").textContent = data.nama_pelayanan;
-      document.getElementById("timestamp").textContent = data.timestamp;
-      document.getElementById("extraText").textContent = data.addText;
-      //$("#non-print-area").hide();
-      //$("#print-area").show();
-      //setTimeout(()=>{
-        window.print();
-      //},500);
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  window.onafterprint = function(){
-    console.log("Printing completed...");
-    //$("#non-print-area").show();
-      //$("#print-area").hide();
- }
- 
-</script>
+      window.onafterprint = function () {
+        console.log("Printing completed...");
+        //$("#non-print-area").show();
+        //$("#print-area").hide();
+      };
+    </script>
   </body>
 </html>
 
