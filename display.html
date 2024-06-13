@@ -50,11 +50,9 @@
                 <div class="row align-items-center">
                     <div class="col-lg-8">
                         <div class="card" id="video">  
-                                <iframe width="100%" height="460px"
-                                    src="https://www.youtube.com/embed/UrM8J9NoFjw?autoplay=1&loop=1&controls=0&mute=0"
-                                    title="Atta Halilintar | PosAja! Wujudkan Keceriaan" frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen></iframe>
+                                <iframe id="vid-frame" width="100%" height="460" src="https://www.youtube.com/embed/VhbadLHAt0o?si=pnZKW8Myia8tAEKQ&autoplay=1&loop=1&controls=0&disablekb=1" 
+                                title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                             <!-- /.card-body -->
                         </div>
                         <!-- /.card -->
@@ -149,7 +147,6 @@
                 loketPelayananElement.textContent = `Loket ${list[2]} - ${String(list[4]).padStart(4, '0')}`;
                 petugasNameElement.textContent = list[3]; 
                 photoProfileElement.src = `${baseUrl}/profile/${list[5]}`;
-
             }
         </script>
         <!-- Display -->
@@ -159,21 +156,31 @@
                 position: "top-end",
                 showConfirmButton: false,
                 timer: 1500,
-                });
+            });
             const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
+            let currentVideoIndex = 0;
 
-            // Create Option
+            
+
             (async () => {
                 const queue = await fetch(`${baseUrl}/display`);
                 const queueData = await queue.json();
-                //console.log(queueData);
                 createQueueList(queueData);
+                
+                const video = await fetch(`${baseUrl}/vid`);
+                const videoData = await video.json();
+                const iframe = document.getElementById('vid-frame')
+                const status = videoData.status;
+                const data = videoData.data;
+                console.log(videoData);
+                console.log('status :',status);
+                console.log('data :',data);
 
                 const footer = await fetch(`${baseUrl}/footer`);
                 const footerData = await footer.json();
                 updateFooterContent(footerData);
             })();
-        
+            
             function updateFooterContent(footerData) {
                 const footerMarquee = document.querySelector(".marquee-content-footer marquee h4");
                 footerMarquee.textContent = footerData.text;
@@ -225,28 +232,28 @@
         </script>
         <!-- Time Footer-->
         <script>
-        $(function () {
-            function updateClock() {
-                var date = new Date();
-                var dateOptions = {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                };
-                var timeOptions = {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: false,
-                };
-                var formattedDate = date.toLocaleDateString("id-ID", dateOptions);
-                var formattedTime = date.toLocaleTimeString("id-ID", timeOptions).replace("Pukul ", "").replace(/\./g, ":");
-                $("#datetime").html(formattedDate + " " + formattedTime);
-            }
-            setInterval(updateClock, 1000);
-            updateClock();
-        });
+            $(function () {
+                function updateClock() {
+                    var date = new Date();
+                    var dateOptions = {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                    };
+                    var timeOptions = {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                        hour12: false,
+                    };
+                    var formattedDate = date.toLocaleDateString("id-ID", dateOptions);
+                    var formattedTime = date.toLocaleTimeString("id-ID", timeOptions).replace("Pukul ", "").replace(/\./g, ":");
+                    $("#datetime").html(formattedDate + " " + formattedTime);
+                }
+                setInterval(updateClock, 1000);
+                updateClock();
+            });
         </script>
     </body>
 </html>
