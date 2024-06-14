@@ -5,9 +5,9 @@ const { Server } = require('socket.io');
 const fs = require('fs');
 const { ThermalPrinter }  = require('node-thermal-printer');
 
- const printer = new ThermalPrinter({
-   width: 80,
- });
+const printer = new ThermalPrinter({
+  width: 80,
+});
 
 const app = express();
 const server = createServer(app);
