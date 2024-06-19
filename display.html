@@ -126,7 +126,14 @@
         <!-- Showtime -->
         <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
         <!-- Show Queue -->
+        <!-- Display -->
         <script>
+            //var toast = Swal.mixin({
+            //    toast: true,
+            //    position: "top-end",
+            //    showConfirmButton: false,
+            //    timer: 1500,
+            //});
             const socket = io();
             var list = [];
             socket.on("show", (msg) => {
@@ -134,6 +141,29 @@
                 list = msg;
                 showAntrian();
             });
+            //const baseUrl = "http://192.168.5.160/laravel-10/antrianpos-app/public";
+            const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
+
+            async function getQueueData(){
+                const queue = await fetch(`${baseUrl}/display`);
+                const queueData = await queue.json();
+                return queueData;
+            }
+            (async () => {
+                //const queue = await fetch(`${baseUrl}/display`);
+                //const queueData = await queue.json();
+                const queueData = await getQueueData();
+                createQueueList(queueData);
+                
+                var video = await fetch(`${baseUrl}/vid`);
+                var videoData = await video.json();
+                videoData = JSON.parse(videoData);
+                updateVideoSrc(videoData);
+
+                const footer = await fetch(`${baseUrl}/footer`);
+                const footerData = await footer.json();
+                updateFooterContent(footerData);
+            })();
 
             function showAntrian() {
                 const card = document.getElementById('antrian-card');
@@ -147,59 +177,63 @@
                 loketPelayananElement.textContent = `Loket ${list[2]} - ${String(list[4]).padStart(4, '0')}`;
                 petugasNameElement.textContent = list[3]; 
                 photoProfileElement.src = `${baseUrl}/profile/${list[5]}`;
+
+                const showAntrianEvent = new Event('showAntrianComplete');
+                document.dispatchEvent(showAntrianEvent);
             }
-        </script>
-        <!-- Display -->
-        <script>
-            var toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 1500,
+
+            document.addEventListener('showAntrianComplete', async () => {
+                const queueData = await getQueueData();
+                createQueueList(queueData); 
             });
-            const baseUrl = "http://192.168.5.160/laravel-10/antrianpos-app/public";
-            let currentVideoIndex = 0;
 
-            (async () => {
-                const queue = await fetch(`${baseUrl}/display`);
-                const queueData = await queue.json();
-                createQueueList(queueData);
-                
-                var video = await fetch(`${baseUrl}/vid`);
-                var videoData = await video.json();
-                videoData = JSON.parse(videoData);
-                updateVideoSrc(videoData);
-                //const iframe = document.getElementById('vid-frame')
-                //const status = videoData.status;
-                //const data = videoData.data;
-                //console.log(videoData);
-                //console.log('status :',status);
-                //console.log('data :',data);
-
-                const footer = await fetch(`${baseUrl}/footer`);
-                const footerData = await footer.json();
-                updateFooterContent(footerData);
-            })();
-            
             function updateVideoSrc(videoData) {
                 const status = videoData.status;
-                const linkSumber = videoData.data[0].link_sumber;
+                const link = videoData.data;
+                //const linkSumber = videoData.data[0].link_sumber;
 
                 const videoContainer = document.getElementById('video');
-                videoContainer.innerHTML = ''; // Clear existing content
-
+                videoContainer.innerHTML = ''; 
+                
+                let currentVideoIndex = 0;
+                
                 if (status === 'local') {
-                    const videoElement = document.createElement('video');
-                    videoElement.width = '100%';
-                    videoElement.height = '460';
-                    videoElement.src = `${baseUrl}/video/${linkSumber}`;
-                    videoElement.controls = true; 
-                    videoContainer.appendChild(videoElement);
+                    //const videoElement = document.createElement('video');
+                    //videoElement.width = '100%';
+                    //videoElement.height = '460';
+                    //videoElement.type = 'video/mp4';
+                    //videoElement.src = `${baseUrl}/video/${linkSumber}`;
+                    //videoElement.controls = true; 
+                    //videoContainer.appendChild(videoElement);
+                    //$(document).ready(function(){
+                    const playNextVideo = () => {
+                        if (currentVideoIndex === link.length) {
+                          currentVideoIndex = 0; // Kembali ke video pertama
+                        }
+                        const videoItem = link[currentVideoIndex];
+                        const videoElement = document.createElement('video');
+                        videoElement.style.width = '100%';
+                        videoElement.height = '460';
+                        videoElement.type = 'video/mp4';
+                        videoElement.src = `${baseUrl}/video/${videoItem.link_sumber}`;
+                        videoElement.controls = false; // Sembunyikan kontrol
+                  
+                        videoElement.addEventListener('ended', playNextVideo); // Panggil playNextVideo saat video selesai
+                  
+                        videoContainer.innerHTML = ''; // Hapus video sebelumnya
+                        videoContainer.appendChild(videoElement);
+                  
+                        videoElement.play(); // Putar video secara otomatis
+                        currentVideoIndex++;
+                    };
+                playNextVideo();
+                //});
                 } else if (status === 'youtube') {
                     const iframe = document.createElement('iframe');
                     iframe.width = '100%';
                     iframe.height = '460';
-                    iframe.src = `https://www.youtube.com/embed/${linkSumber}&autoplay=1&loop=1&controls=0`;
+                    //iframe.src = `https://www.youtube.com/embed/${linkSumber}&autoplay=1&loop=1&controls=0`;
+                    iframe.src = `https://www.youtube.com/embed/${videoData.data[0].link_sumber}&autoplay=1&loop=1&controls=0`;
                     iframe.title = 'YouTube video player';
                     iframe.frameBorder = '0';
                     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
@@ -218,7 +252,7 @@
 
             function createQueueList(queueData) {
                 const antrianContainer = document.getElementById("listAntrian");
-            
+                antrianContainer.innerHTML = ''; 
                 queueData.forEach(queue => {
                     const cardElement = document.createElement('div');
                     cardElement.classList.add('col');
