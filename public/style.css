@@ -23,9 +23,12 @@
 .carousel-img {
     height: 550px;
     width: auto; 
-  }
+}
 
-.card-body {
+#antrian-body{
+    height: 280px;
+}
+#petugas-card {
     padding: 5px;
 }
 
@@ -42,7 +45,7 @@
     padding: 0 20px;
 }
     
-.info-box, .petugas-card{
+.info-box, #petugas-card{
     background-color: #ee3f22;
 }
 
