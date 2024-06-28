@@ -341,8 +341,8 @@
         showConfirmButton: false,
         timer: 1500,
       });
-      //const baseUrl = "http://192.168.5.160/laravel-10/antrianpos-app/public";
-      const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
+      const baseUrl = "http://192.168.5.160/laravel-10/antrianpos-app/public";
+      //const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
       (async () => {
         const banner = await fetch(`${baseUrl}/img`).then((response) => response.json());
         //const bannerData = await banner.json();
@@ -528,46 +528,3 @@
     </script>
   </body>
 </html>
-
-<!-- 
-  async function printAntrian() {
-        try {
-          const printer = new ThermalPrinter({
-            name: "My Thermal Printer",
-            width: 80,
-            characterSet: "A", // Karakter set (ASCII, CP437, etc.)
-            port: "/dev/usb/lp0", // Port koneksi printer (misalnya, USB)
-            baudRate: 9600, // Kecepatan baud rate (untuk koneksi serial)
-            margins: {
-              top: 10, // Margin atas dalam milimeter
-              left: 15, // Margin kiri dalam milimeter
-              right: 15, // Margin kanan dalam milimeter
-              bottom: 10, // Margin bawah dalam milimeter
-            },
-          });
-          await printer.print("PT. POS INDONESIA\n");
-          await printer.print(`${data.nama_pelayanan} - Antrian Berhasil\n`);
-          // Add other printing logic based on your data
-          await printer.cut();
-        } catch (error) {
-          console.error("Error printing:", error);
-        }
-      }
-
-
-      //$.ajax({
-                    //  url: "http://localhost:3000/print-queue",
-                    //  method: "GET",
-                    //  success: function (response) {
-                    //    alert(response.message);
-                    //  },
-                    //  error: function (error) {
-                    //    console.error("Error:", error);
-                    //    alert("Gagal mencetak data antrian");
-                    //  },
-                    //});
-
-                    
-                    //location.reload(); // Optional reload behavior
-                    //await printAntrian(){}
- -->
