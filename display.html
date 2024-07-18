@@ -139,6 +139,11 @@
                 list = msg;
                 showAntrian();
             });
+            socket.on('updateQueue', async () => {
+                const queueData = await getQueueData();
+                createQueueList(queueData);
+            });
+            
             const baseUrl = "http://192.168.5.160/laravel-10/antrianpos-app/public";
             //const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
 

@@ -30,6 +30,11 @@ app.get('/display', async (req, res) => {
   res.sendFile(join(__dirname, 'display.html'));
 });
 
+app.post('/notify', (req, res) => {
+  io.emit('updateQueue');
+  res.sendStatus(200);
+});
+
 app.get('/show', (req, res) => {
   res.header('Access-Control-Allow-Origin','*');
   io.emit('show', req.query.list);
