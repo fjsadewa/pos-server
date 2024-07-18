@@ -55,7 +55,7 @@ io.on('connection', (socket) => {
 });
 
 server.listen(3000, () => {
-  console.log('server running at http://localhost:3000');
+  console.log('server running at http://192.168.5.160:3000');
 });
 // term & conditions di notifikasi
 // searching destination

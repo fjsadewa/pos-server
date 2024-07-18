@@ -165,7 +165,7 @@
   </head>
 
   <body>
-    <div class="wrapper non-print-area">
+    <div class="wrapper full-height non-print-area">
       <!-- Navbar -->
       <div class="row m-3s">
         <div class="col-lg-12">
@@ -370,7 +370,7 @@
           }
 
           const imageElement = document.createElement("img");
-          imageElement.src = `http://192.168.5.160/laravel-10/antrianpos-app/public/banner/${banner}`;
+          imageElement.src = `${baseUrl}/banner/${banner}`;
           imageElement.classList.add("carousel-img");
 
           carouselItem.appendChild(imageElement);
