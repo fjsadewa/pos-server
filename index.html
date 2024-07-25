@@ -183,7 +183,7 @@
             <ul class="navbar-nav ml-auto">
               <li class="nav-item d-none d-sm-inline-block">
                 <div class="nav-link">
-                  <h1 style="font-size: 52px; font-weight: bold">KANTOR KCU MALANG</h1>
+                  <h1 style="font-size: 52px; font-weight: bold">NAMA KANTOR</h1>
                 </div>
               </li>
             </ul>
@@ -344,6 +344,10 @@
       const baseUrl = "http://192.168.5.160/laravel-10/antrianpos-app/public";
       //const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
       (async () => {
+        const cabang = await fetch(`${baseUrl}/header`);
+        const cabangData = await cabang.json();
+        updateCabangContent(cabangData);
+
         const banner = await fetch(`${baseUrl}/img`).then((response) => response.json());
         //const bannerData = await banner.json();
         console.log(banner);
@@ -390,6 +394,11 @@
       function updateFooterContent(footerData) {
         const footerMarquee = document.querySelector(".marquee-content-footer marquee h4");
         footerMarquee.textContent = footerData.text;
+      }
+
+      function updateCabangContent(cabangData) {
+        const footerMarquee = document.querySelector(".nav-link h1");
+        footerMarquee.textContent = cabangData.text;
       }
 
       function createCardForm(categoryData) {

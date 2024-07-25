@@ -36,7 +36,7 @@
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item d-none d-sm-inline-block">
                             <div class="nav-link">
-                                <h1 style="font-size: 52px; font-weight: bold">KANTOR KCU MALANG</h1>
+                                <h1 style="font-size: 52px; font-weight: bold">NAMA KANTOR</h1>
                             </div>
                         </li>
                     </ul>
@@ -153,6 +153,10 @@
                 return queueData;
             }
             (async () => {
+                const cabang = await fetch(`${baseUrl}/header`);
+                const cabangData = await cabang.json();
+                updateCabangContent(cabangData);
+
                 //const queue = await fetch(`${baseUrl}/display`);
                 //const queueData = await queue.json();
                 const queueData = await getQueueData();
@@ -166,6 +170,7 @@
                 const footer = await fetch(`${baseUrl}/footer`);
                 const footerData = await footer.json();
                 updateFooterContent(footerData);
+
             })();
 
             function showAntrian() {
@@ -248,6 +253,11 @@
                 }
             }
 
+            function updateCabangContent(cabangData) {
+                const footerMarquee = document.querySelector(".nav-link h1");
+                footerMarquee.textContent = cabangData.text;
+            }
+            
             function updateFooterContent(footerData) {
                 const footerMarquee = document.querySelector(".marquee-content-footer marquee h4");
                 footerMarquee.textContent = footerData.text;
