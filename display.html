@@ -144,7 +144,7 @@
                 createQueueList(queueData);
             });
             
-            const baseUrl = "http://192.168.5.160/laravel-10/antrianpos-app/public";
+            const baseUrl = "http://192.168.161.160/laravel-10/antrianpos-app/public";
             //const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
 
             async function getQueueData(){
@@ -182,7 +182,7 @@
                 const photoProfileElement = card.querySelector('.petugas-info img');
 
                 nomorAntrianElement.textContent = `${list[0]} - ${list[1]}`;
-                loketPelayananElement.textContent = `Loket ${list[2]} - ${String(list[4]).padStart(4, '0')}`;
+                loketPelayananElement.textContent = `${list[6]} ${list[2]} - ${String(list[4]).padStart(4, '0')}`;
                 petugasNameElement.textContent = list[3]; 
                 photoProfileElement.src = `${baseUrl}/profile/${list[5]}`;
 
