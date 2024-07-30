@@ -126,12 +126,6 @@
         <!-- Show Queue -->
         <!-- Display -->
         <script>
-            //var toast = Swal.mixin({
-            //    toast: true,
-            //    position: "top-end",
-            //    showConfirmButton: false,
-            //    timer: 1500,
-            //});
             const socket = io();
             var list = [];
             socket.on("show", (msg) => {
@@ -144,15 +138,24 @@
                 createQueueList(queueData);
             });
             
-            const baseUrl = "http://192.168.161.160/laravel-10/antrianpos-app/public";
+            //const baseUrl = "http://192.168.161.160/laravel-10/antrianpos-app/public";
             //const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
 
             async function getQueueData(){
+                const response = await fetch("/env");
+                const data = await response.json();
+                const ip_add = data.NOMOR_IP;
+                const baseUrl = "http://" + ip_add + "/laravel-10/antrianpos-app/public";
                 const queue = await fetch(`${baseUrl}/display`);
                 const queueData = await queue.json();
                 return queueData;
             }
             (async () => {
+                const response = await fetch("/env");
+                const data = await response.json();
+                const ip_add = data.NOMOR_IP;
+                const baseUrl = "http://" + ip_add + "/laravel-10/antrianpos-app/public";
+
                 const cabang = await fetch(`${baseUrl}/header`);
                 const cabangData = await cabang.json();
                 updateCabangContent(cabangData);
@@ -165,7 +168,7 @@
                 var video = await fetch(`${baseUrl}/vid`);
                 var videoData = await video.json();
                 videoData = JSON.parse(videoData);
-                updateVideoSrc(videoData);
+                updateVideoSrc(videoData,baseUrl);
 
                 const footer = await fetch(`${baseUrl}/footer`);
                 const footerData = await footer.json();
@@ -195,7 +198,7 @@
                 createQueueList(queueData); 
             });
 
-            function updateVideoSrc(videoData) {
+            function updateVideoSrc(videoData,baseUrl) {
                 const status = videoData.status;
                 const link = videoData.data;
                 //const linkSumber = videoData.data[0].link_sumber;

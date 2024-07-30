@@ -341,17 +341,21 @@
         showConfirmButton: false,
         timer: 1500,
       });
-      const baseUrl = "http://192.168.161.160/laravel-10/antrianpos-app/public";
-      //const baseUrl = "http://localhost/laravel-10/antrianpos-app/public";
+      //const ip_add = process.env.NOMOR_IP;
+      //const baseUrl = "http://192.168.161.160/laravel-10/antrianpos-app/public";
       (async () => {
+        const response = await fetch("/env");
+        const data = await response.json();
+        const ip_add = data.NOMOR_IP;
+        const baseUrl = "http://" + ip_add + "/laravel-10/antrianpos-app/public";
+
         const cabang = await fetch(`${baseUrl}/header`);
         const cabangData = await cabang.json();
         updateCabangContent(cabangData);
 
         const banner = await fetch(`${baseUrl}/img`).then((response) => response.json());
-        //const bannerData = await banner.json();
-        console.log(banner);
-        displayBanners(banner);
+        console.log("Data banner:", banner);
+        displayBanners(banner, baseUrl);
 
         const footer = await fetch(`${baseUrl}/footer`);
         const footerData = await footer.json();
@@ -359,13 +363,12 @@
 
         const categories = await fetch(`${baseUrl}/form`);
         const categoryData = await categories.json();
-        createCardForm(categoryData);
+        createCardForm(categoryData, baseUrl);
       })();
 
-      function displayBanners(banners) {
+      function displayBanners(banners, baseUrl) {
         const carouselInner = document.querySelector(".carousel-inner");
         const carouselIndicators = document.querySelector(".carousel-indicators");
-
         banners.forEach((banner, index) => {
           const carouselItem = document.createElement("div");
           carouselItem.classList.add("carousel-item");
@@ -401,7 +404,7 @@
         footerMarquee.textContent = cabangData.text;
       }
 
-      function createCardForm(categoryData) {
+      function createCardForm(categoryData, baseUrl) {
         const categoryContainer = document.getElementById("category-container");
         categoryData.forEach((category) => {
           const card = document.createElement("div");
