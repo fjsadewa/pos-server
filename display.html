@@ -127,11 +127,16 @@
         <!-- Display -->
         <script>
             const socket = io();
+            const response = await fetch("/env");
+            const data = await response.json();
+            const ip_add = data.NOMOR_IP;
+            const baseUrl = "http://" + ip_add + "/laravel-10/antrianpos-app/public";
+            
             var list = [];
             socket.on("show", (msg) => {
                 console.log(msg);
                 list = msg;
-                showAntrian();
+                showAntrian(baseUrl);
             });
             socket.on('updateQueue', async () => {
                 const queueData = await getQueueData();
@@ -176,7 +181,7 @@
 
             })();
 
-            function showAntrian() {
+            function showAntrian(baseUrl) {
                 const card = document.getElementById('antrian-card');
 
                 const nomorAntrianElement = card.querySelector('#nomorAntrian');

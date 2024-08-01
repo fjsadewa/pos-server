@@ -515,6 +515,10 @@
       $("#print-area").hide();
       async function getAntrianData() {
         try {
+          const env = await fetch("/env");
+          const dataEnv = await env.json();
+          const ip_add = dataEnv.NOMOR_IP;
+          const baseUrl = "http://" + ip_add + "/laravel-10/antrianpos-app/public";
           const response = await fetch(`${baseUrl}/getAntrian`);
           const data = await response.json();
 
